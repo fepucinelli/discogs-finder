@@ -1,4 +1,8 @@
-export default function Home() {
+import { getSession } from "@/lib/session";
+
+export default async function Home() {
+  const session = await getSession();
+  const isAuthenticated = !!session.discogs_access_token;
   return (
     <main
       id="main-content"
@@ -109,9 +113,15 @@ export default function Home() {
 
         {/* CTA */}
         <div className="fade-up" style={{ animationDelay: "240ms", display: "flex", alignItems: "center", gap: 16 }}>
-          <a href="/api/auth/discogs" className="cta-primary">
-            Connect with Discogs
-          </a>
+          {isAuthenticated ? (
+            <a href="/listen" className="cta-primary">
+              Listen
+            </a>
+          ) : (
+            <a href="/api/auth/discogs" className="cta-primary">
+              Connect with Discogs
+            </a>
+          )}
           <span
             style={{ color: "var(--amber)", fontSize: 22, lineHeight: 1 }}
             aria-hidden

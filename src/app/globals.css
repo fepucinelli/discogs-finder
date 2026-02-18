@@ -60,6 +60,10 @@
 }
 .header-connect-btn:hover { background: var(--amber-2); }
 
+@media (max-width: 480px) {
+  .header-username { display: none; }
+}
+
 /* ── Keyframes ─────────────────────────────────────────────── */
 @keyframes spin-record {
   to { transform: rotate(360deg); }

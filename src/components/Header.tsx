@@ -70,7 +70,7 @@ export default function Header() {
                 Listen
               </Link>
               <span
-                className="font-mono"
+                className="font-mono header-username"
                 style={{
                   fontSize: 11,
                   color: "var(--cream-3)",

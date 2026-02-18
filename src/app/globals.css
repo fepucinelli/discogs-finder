@@ -17,6 +17,25 @@
   --sage:        #5a9960;
 }
 
+/* ── Header Nav ─────────────────────────────────────────────── */
+.header-nav-link {
+  color: var(--cream-2);
+  transition: color 0.15s;
+}
+.header-nav-link:hover { color: var(--cream); }
+
+.header-logout-link {
+  color: var(--cream-3);
+  transition: color 0.15s;
+}
+.header-logout-link:hover { color: var(--crimson); }
+
+.header-connect-btn {
+  background: var(--amber);
+  transition: background 0.15s;
+}
+.header-connect-btn:hover { background: var(--amber-2); }
+
 /* ── Keyframes ─────────────────────────────────────────────── */
 @keyframes spin-record {
   to { transform: rotate(360deg); }

@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
       master_id: r.master_id,
     })) ?? [],
     pagination: data.pagination,
-  });
+  }, { headers: { "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400" } });
 }
 
 interface DiscogsSearchResult {

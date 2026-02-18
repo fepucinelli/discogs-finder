@@ -48,5 +48,5 @@ export async function POST(req: NextRequest) {
       timecode: data.result.timecode,
       song_link: data.result.song_link,
     },
-  });
+  }, { headers: { "Cache-Control": "no-store" } });
 }

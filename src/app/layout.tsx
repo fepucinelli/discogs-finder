@@ -40,6 +40,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://api.discogs.com" />
+        <link rel="dns-prefetch" href="https://api.discogs.com" />
+        <link rel="dns-prefetch" href="https://api.audd.io" />
+      </head>
       <body className={`${abril.variable} ${lora.variable} ${ibmMono.variable}`}>
         <Header />
         {children}

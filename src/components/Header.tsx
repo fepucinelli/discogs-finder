@@ -59,21 +59,13 @@ export default function Header() {
             <>
               <Link
                 href="/listen"
-                className="font-mono"
+                className="font-mono header-nav-link"
                 style={{
                   fontSize: 11,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "var(--cream-2)",
                   textDecoration: "none",
-                  transition: "color 0.15s",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--cream)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--cream-2)")
-                }
               >
                 Listen
               </Link>
@@ -89,21 +81,13 @@ export default function Header() {
               </span>
               <a
                 href="/api/auth/logout"
-                className="font-mono"
+                className="font-mono header-logout-link"
                 style={{
                   fontSize: 11,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: "var(--cream-3)",
                   textDecoration: "none",
-                  transition: "color 0.15s",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--crimson)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--cream-3)")
-                }
               >
                 Exit
               </a>
@@ -111,24 +95,16 @@ export default function Header() {
           ) : session === null ? null : (
             <a
               href="/api/auth/discogs"
-              className="font-mono"
+              className="font-mono header-connect-btn"
               style={{
                 fontSize: 11,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                background: "var(--amber)",
                 color: "#100c09",
                 padding: "7px 18px",
                 textDecoration: "none",
                 fontWeight: 500,
-                transition: "background 0.15s",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = "var(--amber-2)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background = "var(--amber)")
-              }
             >
               Connect
             </a>

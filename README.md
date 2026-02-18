@@ -338,3 +338,9 @@ Adds a release to the authenticated user's collection.
 
 ### `GET /api/discogs/collection`
 Returns the authenticated user's full collection (newest first, 50 per page).
+
+---
+
+## Screenshots
+
+![Discogs Finder — landing page, recorder, and search results](docs/screenshot.png)

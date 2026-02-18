@@ -1,5 +1,7 @@
 # Discogs Finder
 
+**[Live demo →](https://discogs-finder.vercel.app)**
+
 Hear a record spinning. Find the exact pressing. Add it to your Discogs collection in seconds.
 
 Discogs Finder is a full-stack web application that listens to music through your microphone, identifies the track using audio recognition, searches the Discogs database for matching releases, and lets you add the exact pressing to your collection — all in one flow.

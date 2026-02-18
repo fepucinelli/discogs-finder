@@ -2,17 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AudioRecorder from "@/components/AudioRecorder";
+import AudioRecorder, { RecognitionResult } from "@/components/AudioRecorder";
 import ReleaseCard, { Release } from "@/components/ReleaseCard";
-
-interface RecognitionResult {
-  artist: string;
-  title: string;
-  album?: string;
-  release_date?: string;
-  label?: string;
-  song_link?: string;
-}
 
 export default function ListenPage() {
   const router = useRouter();
@@ -22,7 +13,6 @@ export default function ListenPage() {
   const [error, setError] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
 
-  // Auth guard
   useEffect(() => {
     fetch("/api/auth/me")
       .then((r) => r.json())
@@ -39,13 +29,9 @@ export default function ListenPage() {
     setSearching(true);
 
     try {
-      const params = new URLSearchParams({
-        artist: result.artist,
-        title: result.title,
-      });
+      const params = new URLSearchParams({ artist: result.artist, title: result.title });
       const res = await fetch(`/api/discogs/search?${params}`);
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.error ?? "Search failed");
       setReleases(data.results ?? []);
     } catch (err) {
@@ -74,49 +60,170 @@ export default function ListenPage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10">
+    <main
+      style={{
+        maxWidth: 660,
+        margin: "0 auto",
+        padding: "3.5rem 1.5rem 6rem",
+      }}
+    >
+      {/* Username — subtle */}
       {username && (
-        <p className="text-center text-xs text-zinc-600 mb-8">
-          Logged in as <span className="text-zinc-400">@{username}</span>
+        <p
+          className="font-mono fade-up"
+          style={{
+            textAlign: "center",
+            fontSize: 10,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "var(--cream-3)",
+            marginBottom: "3rem",
+          }}
+        >
+          @{username}
         </p>
       )}
 
-      {/* Recorder */}
-      <section className="flex flex-col items-center mb-10">
+      {/* ── Recorder ──────────────────────────────────────────── */}
+      <section
+        className="fade-up"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "3.5rem",
+          animationDelay: "80ms",
+        }}
+      >
         <AudioRecorder onResult={handleResult} onError={setError} />
       </section>
 
-      {/* Error banner */}
+      {/* ── Error ─────────────────────────────────────────────── */}
       {error && (
-        <div className="bg-red-900/40 border border-red-800 text-red-300 rounded-xl px-4 py-3 text-sm mb-6">
+        <div
+          className="font-mono fade-up"
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.06em",
+            color: "var(--crimson)",
+            background: "rgba(196,64,64,0.08)",
+            border: "1px solid rgba(196,64,64,0.25)",
+            padding: "12px 16px",
+            marginBottom: "2rem",
+          }}
+        >
           {error}
         </div>
       )}
 
-      {/* Recognized track */}
+      {/* ── Recognized track ──────────────────────────────────── */}
       {track && (
-        <section className="mb-8">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Recognized</p>
-            <p className="text-white text-xl font-bold">{track.title}</p>
-            <p className="text-zinc-400">{track.artist}</p>
+        <section className="fade-up" style={{ marginBottom: "2.5rem" }}>
+          {/* Section label */}
+          <div
+            className="font-mono"
+            style={{
+              fontSize: 9,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "var(--amber)",
+              marginBottom: "1rem",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            ◆ Recognized
+            <span
+              style={{
+                flex: 1,
+                height: 1,
+                background: "var(--ink-border)",
+                display: "block",
+              }}
+            />
+          </div>
+
+          {/* Track card */}
+          <div
+            style={{
+              background: "var(--ink-surface)",
+              border: "1px solid var(--ink-border)",
+              padding: "20px 22px",
+            }}
+          >
+            <p
+              className="font-display"
+              style={{
+                fontSize: 28,
+                lineHeight: 1.1,
+                color: "var(--cream)",
+                marginBottom: 6,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {track.title}
+            </p>
+            <p
+              className="font-body"
+              style={{
+                fontSize: 15,
+                fontStyle: "italic",
+                color: "var(--cream-2)",
+                marginBottom: track.album ? 4 : 0,
+              }}
+            >
+              {track.artist}
+            </p>
             {track.album && (
-              <p className="text-zinc-600 text-sm mt-1">{track.album}</p>
+              <p
+                className="font-mono"
+                style={{ fontSize: 11, color: "var(--cream-3)", letterSpacing: "0.06em" }}
+              >
+                {track.album}
+              </p>
             )}
-            <div className="flex gap-3 mt-4">
+
+            <div
+              style={{
+                marginTop: 16,
+                paddingTop: 14,
+                borderTop: "1px solid var(--ink-border)",
+                display: "flex",
+                gap: 20,
+              }}
+            >
               {track.song_link && (
                 <a
                   href={track.song_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-zinc-500 hover:text-white underline transition-colors"
+                  className="font-mono"
+                  style={{
+                    fontSize: 10,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "var(--amber)",
+                    textDecoration: "none",
+                  }}
                 >
-                  Listen online →
+                  Stream →
                 </a>
               )}
               <button
                 onClick={handleReset}
-                className="text-xs text-zinc-600 hover:text-zinc-300 underline transition-colors"
+                className="font-mono"
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: 10,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--cream-3)",
+                  cursor: "pointer",
+                  padding: 0,
+                  textDecoration: "underline",
+                  textUnderlineOffset: 3,
+                }}
               >
                 Clear
               </button>
@@ -125,30 +232,93 @@ export default function ListenPage() {
         </section>
       )}
 
-      {/* Discogs results */}
+      {/* ── Searching ─────────────────────────────────────────── */}
       {searching && (
-        <div className="text-center text-zinc-500 text-sm py-8">
+        <div
+          className="font-mono shimmer"
+          style={{
+            textAlign: "center",
+            fontSize: 11,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "var(--cream-3)",
+            padding: "2rem 0",
+          }}
+        >
           Searching Discogs…
         </div>
       )}
 
+      {/* ── Results ───────────────────────────────────────────── */}
       {!searching && releases.length > 0 && (
-        <section>
-          <p className="text-xs text-zinc-500 uppercase tracking-wider mb-4">
-            {releases.length} releases found — pick one to add
+        <section className="fade-up">
+          <div
+            className="font-mono"
+            style={{
+              fontSize: 9,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "var(--amber)",
+              marginBottom: "1rem",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            ◆ {releases.length} releases found
+            <span
+              style={{
+                flex: 1,
+                height: 1,
+                background: "var(--ink-border)",
+                display: "block",
+              }}
+            />
+          </div>
+
+          <p
+            className="font-body"
+            style={{
+              fontSize: 13,
+              fontStyle: "italic",
+              color: "var(--cream-3)",
+              marginBottom: "1.25rem",
+            }}
+          >
+            Pick the exact pressing to add to your collection.
           </p>
-          <div className="flex flex-col gap-3">
-            {releases.map((release) => (
-              <ReleaseCard key={release.id} release={release} onAdd={handleAdd} />
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            {releases.map((release, i) => (
+              <div
+                key={release.id}
+                className="fade-up"
+                style={{ animationDelay: `${i * 40}ms` }}
+              >
+                <ReleaseCard release={release} onAdd={handleAdd} />
+              </div>
             ))}
           </div>
         </section>
       )}
 
+      {/* ── No results ────────────────────────────────────────── */}
       {!searching && track && releases.length === 0 && !error && (
-        <div className="text-center text-zinc-600 text-sm py-6">
-          No Discogs releases found for "{track.title}" by {track.artist}.
-        </div>
+        <p
+          className="font-body"
+          style={{
+            textAlign: "center",
+            fontStyle: "italic",
+            fontSize: 15,
+            color: "var(--cream-3)",
+            padding: "2rem 0",
+          }}
+        >
+          No Discogs releases found for&nbsp;
+          <em style={{ color: "var(--cream-2)" }}>{track.title}</em>
+          &nbsp;by&nbsp;
+          <em style={{ color: "var(--cream-2)" }}>{track.artist}</em>.
+        </p>
       )}
     </main>
   );

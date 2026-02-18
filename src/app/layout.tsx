@@ -1,26 +1,38 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Abril_Fatface, Lora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 
-const geist = Geist({
-  variable: "--font-geist-sans",
+const abril = Abril_Fatface({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-abril",
+});
+
+const lora = Lora({
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-lora",
+});
+
+const ibmMono = IBM_Plex_Mono({
+  weight: ["300", "400", "500"],
+  subsets: ["latin"],
+  variable: "--font-ibm-mono",
 });
 
 export const metadata: Metadata = {
-  title: "VinylFinder — Discogs Song Finder",
-  description: "Listen to a song and add it to your Discogs collection",
+  title: "Discogs Finder — Hear it. Find it. Collect it.",
+  description: "Listen to a record and add it to your Discogs collection instantly.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${geist.variable} antialiased bg-zinc-950 text-white`}>
+    <html lang="en">
+      <body className={`${abril.variable} ${lora.variable} ${ibmMono.variable}`}>
         <Header />
         {children}
       </body>

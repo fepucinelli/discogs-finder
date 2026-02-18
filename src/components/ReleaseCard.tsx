@@ -35,55 +35,103 @@ export default function ReleaseCard({ release, onAdd }: Props) {
 
   const imgSrc = release.thumb || release.cover_image;
 
+  const meta = [
+    release.year,
+    release.country,
+    release.format?.join(" · "),
+    release.label?.[0],
+  ]
+    .filter(Boolean)
+    .join("  ·  ");
+
   return (
-    <div className="flex items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-600 transition-colors">
-      <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-zinc-800">
+    <div className="release-card">
+      {/* Cover art */}
+      <div
+        style={{
+          flexShrink: 0,
+          width: 56,
+          height: 56,
+          background: "var(--ink-raised)",
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
         {imgSrc ? (
           <Image
             src={imgSrc}
             alt={release.title}
-            width={64}
-            height={64}
-            className="w-full h-full object-cover"
+            width={56}
+            height={56}
+            style={{ width: "100%", height: "100%", objectFit: "cover", filter: "sepia(0.15) brightness(0.95)" }}
             unoptimized
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-2xl">
-            💿
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="var(--ink-border2)" strokeWidth="1.5" />
+              <circle cx="12" cy="12" r="3"  stroke="var(--ink-border2)" strokeWidth="1.5" />
+              <circle cx="12" cy="12" r="0.8" fill="var(--ink-border2)" />
+            </svg>
           </div>
         )}
       </div>
 
-      <div className="flex-1 min-w-0">
-        <p className="text-white font-medium text-sm leading-tight truncate">
+      {/* Info */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p
+          className="font-body"
+          style={{
+            fontSize: 14,
+            fontWeight: 500,
+            color: "var(--cream)",
+            lineHeight: 1.35,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            marginBottom: 5,
+          }}
+        >
           {release.title}
         </p>
-        <div className="mt-1 flex flex-wrap gap-2 text-xs text-zinc-500">
-          {release.year && <span>{release.year}</span>}
-          {release.country && <span>{release.country}</span>}
-          {release.format && release.format.length > 0 && (
-            <span>{release.format.join(", ")}</span>
-          )}
-          {release.label && release.label.length > 0 && (
-            <span>{release.label[0]}</span>
-          )}
-        </div>
+        {meta && (
+          <p
+            className="font-mono"
+            style={{
+              fontSize: 10,
+              color: "var(--cream-3)",
+              letterSpacing: "0.06em",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {meta}
+          </p>
+        )}
       </div>
 
+      {/* Add button */}
       <button
-        onClick={handleAdd}
+        onClick={status === "idle" ? handleAdd : undefined}
         disabled={status !== "idle"}
-        className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-          status === "added"
-            ? "bg-green-900 text-green-300 cursor-default"
-            : status === "error"
-            ? "bg-red-900 text-red-300 cursor-default"
-            : status === "adding"
-            ? "bg-zinc-700 text-zinc-400 cursor-wait"
-            : "bg-yellow-500 hover:bg-yellow-400 text-black cursor-pointer"
-        }`}
+        className={`add-btn ${status !== "idle" ? status : ""}`}
       >
-        {status === "added" ? "✓ Added" : status === "adding" ? "Adding…" : status === "error" ? "Failed" : "+ Add"}
+        {status === "added"
+          ? "✓ Added"
+          : status === "adding"
+          ? "Adding…"
+          : status === "error"
+          ? "Failed"
+          : "+ Add"}
       </button>
     </div>
   );

@@ -1,26 +1,163 @@
 @import "tailwindcss";
 
+/* ── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink:         #100c09;
+  --ink-surface: #1c1410;
+  --ink-raised:  #271e16;
+  --ink-border:  #3d2a1c;
+  --ink-border2: #5c4030;
+  --cream:       #f0e4cc;
+  --cream-2:     #a89070;
+  --cream-3:     #6a5040;
+  --amber:       #e8920f;
+  --amber-2:     #f5a830;
+  --amber-dark:  #b07010;
+  --crimson:     #c44040;
+  --sage:        #5a9960;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes spin-record {
+  to { transform: rotate(360deg); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.65; }
+  100% { transform: scale(2.6); opacity: 0;    }
 }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes shimmer-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.9;  }
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Animation utilities ───────────────────────────────────── */
+.spin-record { animation: spin-record 5s linear infinite; }
+.spin-fast   { animation: spin-record 0.65s linear infinite; }
+.pulse-ring  { animation: pulse-ring 2.2s ease-out infinite; }
+.fade-up     { animation: fade-up 0.65s cubic-bezier(0.16,1,0.3,1) both; }
+.shimmer     { animation: shimmer-pulse 1.4s ease-in-out infinite; }
+.blink       { animation: blink-dot 1.1s ease-in-out infinite; }
+
+/* ── Base reset ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { color-scheme: dark; scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-lora, Georgia, serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100svh;
 }
+
+/* ── Grain overlay ─────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999;
+  opacity: 0.042;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ── CSS Vinyl disc ────────────────────────────────────────── */
+.vinyl-disc {
+  border-radius: 50%;
+  background:
+    conic-gradient(from 120deg at 50% 50%,
+      transparent 0deg,
+      rgba(255,255,255,0.022) 18deg,
+      transparent 36deg,
+      transparent 360deg),
+    radial-gradient(circle at 50% 50%, #0d0905 0 4.2%, transparent 4.3%),
+    radial-gradient(circle at 50% 50%,
+      #c07010 0 36%,
+      #8a5008 36% 40%,
+      transparent 40.1%),
+    repeating-radial-gradient(circle at 50% 50%,
+      #1c1410 0px 1.5px,
+      #0c0906 1.5px 3px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 0 0 2px rgba(0,0,0,0.8),
+    0 30px 80px rgba(0,0,0,0.9),
+    0 6px 20px rgba(0,0,0,0.5);
+  will-change: transform;
+}
+
+/* ── Typography helpers ────────────────────────────────────── */
+.font-display { font-family: var(--font-abril, Georgia, serif); }
+.font-mono    { font-family: var(--font-ibm-mono, monospace); }
+.font-body    { font-family: var(--font-lora, Georgia, serif); }
+
+/* ── CTA hover ─────────────────────────────────────────────── */
+.cta-primary {
+  display: inline-block;
+  background: var(--amber);
+  color: #100c09;
+  padding: 13px 30px;
+  font-family: var(--font-ibm-mono, monospace);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.18s ease, transform 0.15s ease;
+}
+.cta-primary:hover { background: var(--amber-2); transform: translateY(-1px); }
+
+/* ── Release card ──────────────────────────────────────────── */
+.release-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--ink-border);
+  background: var(--ink-surface);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.release-card:hover {
+  border-color: var(--ink-border2);
+  background: var(--ink-raised);
+}
+
+/* ── Add button ────────────────────────────────────────────── */
+.add-btn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  font-family: var(--font-ibm-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--amber-dark);
+  background: transparent;
+  color: var(--amber);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.add-btn:hover:not(:disabled)  { background: var(--amber); color: #100c09; }
+.add-btn.added  { border-color: var(--sage); color: var(--sage); cursor: default; }
+.add-btn.adding { opacity: 0.5; cursor: wait; }
+.add-btn.error  { border-color: var(--crimson); color: var(--crimson); cursor: default; }
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ink-border); border-radius: 2px; }
+
+/* ── Selection ─────────────────────────────────────────────── */
+::selection { background: rgba(232,146,15,0.28); color: var(--cream); }

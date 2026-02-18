@@ -19,38 +19,118 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="border-b border-zinc-800 bg-zinc-950">
-      <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-white font-bold text-lg tracking-tight">
-          <span className="text-2xl">🎵</span>
-          <span>VinylFinder</span>
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        height: 60,
+        borderBottom: "1px solid var(--ink-border)",
+        background: "rgba(16,12,9,0.94)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "0 2.5rem",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: "none", lineHeight: 1 }}>
+          <span
+            className="font-display"
+            style={{ fontSize: 21, color: "var(--cream)", letterSpacing: "-0.02em" }}
+          >
+            Discogs
+            <span style={{ color: "var(--amber)" }}>Finder</span>
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-4">
+        {/* Nav */}
+        <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
           {session?.authenticated ? (
             <>
               <Link
                 href="/listen"
-                className="text-sm text-zinc-400 hover:text-white transition-colors"
+                className="font-mono"
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--cream-2)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--cream)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--cream-2)")
+                }
               >
                 Listen
               </Link>
-              <span className="text-sm text-zinc-500">
+              <span
+                className="font-mono"
+                style={{
+                  fontSize: 11,
+                  color: "var(--cream-3)",
+                  letterSpacing: "0.06em",
+                }}
+              >
                 @{session.username}
               </span>
               <a
                 href="/api/auth/logout"
-                className="text-sm text-zinc-400 hover:text-red-400 transition-colors"
+                className="font-mono"
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--cream-3)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--crimson)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--cream-3)")
+                }
               >
-                Logout
+                Exit
               </a>
             </>
-          ) : (
+          ) : session === null ? null : (
             <a
               href="/api/auth/discogs"
-              className="text-sm bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-md transition-colors"
+              className="font-mono"
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                background: "var(--amber)",
+                color: "#100c09",
+                padding: "7px 18px",
+                textDecoration: "none",
+                fontWeight: 500,
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "var(--amber-2)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "var(--amber)")
+              }
             >
-              Connect Discogs
+              Connect
             </a>
           )}
         </nav>

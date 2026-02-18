@@ -63,8 +63,8 @@ export default function ReleaseCard({ release, onAdd }: Props) {
             alt={release.title}
             width={56}
             height={56}
+            sizes="56px"
             style={{ width: "100%", height: "100%", objectFit: "cover", filter: "sepia(0.15) brightness(0.95)" }}
-            unoptimized
           />
         ) : (
           <div

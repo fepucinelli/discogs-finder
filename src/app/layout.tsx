@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Abril_Fatface, Lora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -23,8 +23,16 @@ const ibmMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Discogs Finder — Hear it. Find it. Collect it.",
+  title: {
+    default: "Discogs Finder — Hear it. Find it. Collect it.",
+    template: "%s | Discogs Finder",
+  },
   description: "Listen to a record and add it to your Discogs collection instantly.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

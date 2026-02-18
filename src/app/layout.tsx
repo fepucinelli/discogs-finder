@@ -46,6 +46,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.audd.io" />
       </head>
       <body className={`${abril.variable} ${lora.variable} ${ibmMono.variable}`}>
+        <a href="#main-content" className="skip-to-content">Skip to content</a>
         <Header />
         {children}
       </body>

@@ -9,6 +9,7 @@ export default function Error({
 }) {
   return (
     <main
+      id="main-content"
       style={{
         maxWidth: 660,
         margin: "0 auto",
@@ -20,6 +21,7 @@ export default function Error({
       }}
     >
       <p
+        role="alert"
         className="font-mono"
         style={{
           fontSize: 12,
@@ -34,6 +36,7 @@ export default function Error({
       </p>
       <button
         onClick={reset}
+        aria-label="Try again — reload the page"
         className="font-mono"
         style={{
           background: "none",

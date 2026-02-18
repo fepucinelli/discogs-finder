@@ -17,6 +17,30 @@
   --sage:        #5a9960;
 }
 
+/* ── Skip to content ───────────────────────────────────────── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 10000;
+  padding: 10px 20px;
+  background: var(--amber);
+  color: #100c09;
+  font-family: var(--font-ibm-mono, monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.skip-to-content:focus { top: 0; outline: none; }
+
+/* ── Focus visible ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
 /* ── Header Nav ─────────────────────────────────────────────── */
 .header-nav-link {
   color: var(--cream-2);
@@ -137,7 +161,8 @@ body::before {
   text-decoration: none;
   transition: background 0.18s ease, transform 0.15s ease;
 }
-.cta-primary:hover { background: var(--amber-2); transform: translateY(-1px); }
+.cta-primary:hover       { background: var(--amber-2); transform: translateY(-1px); }
+.cta-primary:focus-visible { outline-offset: 4px; }
 
 /* ── Release card ──────────────────────────────────────────── */
 .release-card {
@@ -168,7 +193,8 @@ body::before {
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.add-btn:hover:not(:disabled)  { background: var(--amber); color: #100c09; }
+.add-btn:hover:not(:disabled)   { background: var(--amber); color: #100c09; }
+.add-btn:focus-visible          { outline-offset: 2px; }
 .add-btn.added  { border-color: var(--sage); color: var(--sage); cursor: default; }
 .add-btn.adding { opacity: 0.5; cursor: wait; }
 .add-btn.error  { border-color: var(--crimson); color: var(--crimson); cursor: default; }

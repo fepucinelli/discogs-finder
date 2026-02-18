@@ -60,7 +60,7 @@ export default function ReleaseCard({ release, onAdd }: Props) {
         {imgSrc ? (
           <Image
             src={imgSrc}
-            alt={release.title}
+            alt={`Cover art for ${release.title}`}
             width={56}
             height={56}
             sizes="56px"
@@ -76,7 +76,7 @@ export default function ReleaseCard({ release, onAdd }: Props) {
               justifyContent: "center",
             }}
           >
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none">
               <circle cx="12" cy="12" r="10" stroke="var(--ink-border2)" strokeWidth="1.5" />
               <circle cx="12" cy="12" r="3"  stroke="var(--ink-border2)" strokeWidth="1.5" />
               <circle cx="12" cy="12" r="0.8" fill="var(--ink-border2)" />
@@ -123,6 +123,13 @@ export default function ReleaseCard({ release, onAdd }: Props) {
       <button
         onClick={status === "idle" ? handleAdd : undefined}
         disabled={status !== "idle"}
+        aria-label={
+          status === "added"   ? `${release.title} added to your collection` :
+          status === "adding"  ? `Adding ${release.title} to your collection…` :
+          status === "error"   ? `Failed to add ${release.title}. Try again.` :
+                                 `Add ${release.title} to your collection`
+        }
+        aria-busy={status === "adding"}
         className={`add-btn ${status !== "idle" ? status : ""}`}
       >
         {status === "added"

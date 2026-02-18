@@ -61,6 +61,7 @@ export default function ListenPage() {
 
   return (
     <main
+      id="main-content"
       style={{
         maxWidth: 660,
         margin: "0 auto",
@@ -71,6 +72,7 @@ export default function ListenPage() {
       {username && (
         <p
           className="font-mono fade-up"
+          aria-label={`Logged in as ${username}`}
           style={{
             textAlign: "center",
             fontSize: 10,
@@ -100,6 +102,7 @@ export default function ListenPage() {
       {/* ── Error ─────────────────────────────────────────────── */}
       {error && (
         <div
+          role="alert"
           className="font-mono fade-up"
           style={{
             fontSize: 12,
@@ -117,9 +120,10 @@ export default function ListenPage() {
 
       {/* ── Recognized track ──────────────────────────────────── */}
       {track && (
-        <section className="fade-up" style={{ marginBottom: "2.5rem" }}>
+        <section aria-label="Recognized track" className="fade-up" style={{ marginBottom: "2.5rem" }}>
           {/* Section label */}
           <div
+            aria-hidden="true"
             className="font-mono"
             style={{
               fontSize: 9,
@@ -197,6 +201,7 @@ export default function ListenPage() {
                   href={track.song_link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Stream ${track.title} by ${track.artist} (opens in new tab)`}
                   className="font-mono"
                   style={{
                     fontSize: 10,
@@ -211,6 +216,7 @@ export default function ListenPage() {
               )}
               <button
                 onClick={handleReset}
+                aria-label="Clear recognized track and start over"
                 className="font-mono"
                 style={{
                   background: "none",
@@ -235,6 +241,8 @@ export default function ListenPage() {
       {/* ── Searching ─────────────────────────────────────────── */}
       {searching && (
         <div
+          role="status"
+          aria-live="polite"
           className="font-mono shimmer"
           style={{
             textAlign: "center",
@@ -251,8 +259,9 @@ export default function ListenPage() {
 
       {/* ── Results ───────────────────────────────────────────── */}
       {!searching && releases.length > 0 && (
-        <section className="fade-up">
+        <section aria-label={`${releases.length} releases found on Discogs`} className="fade-up">
           <div
+            aria-hidden="true"
             className="font-mono"
             style={{
               fontSize: 9,
@@ -305,6 +314,7 @@ export default function ListenPage() {
       {/* ── No results ────────────────────────────────────────── */}
       {!searching && track && releases.length === 0 && !error && (
         <p
+          role="status"
           className="font-body"
           style={{
             textAlign: "center",

@@ -1,6 +1,7 @@
 export default function Home() {
   return (
     <main
+      id="main-content"
       style={{
         minHeight: "calc(100svh - 60px)",
         position: "relative",

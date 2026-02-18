@@ -54,7 +54,7 @@ export default function Header() {
         </Link>
 
         {/* Nav */}
-        <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+        <nav aria-label="Main navigation" style={{ display: "flex", alignItems: "center", gap: 28 }}>
           {session?.authenticated ? (
             <>
               <Link

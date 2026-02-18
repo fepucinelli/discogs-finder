@@ -195,7 +195,8 @@ export default function AudioRecorder({ onResult, onError }: Props) {
         <button
           onClick={isProcessing ? undefined : handleClick}
           disabled={isProcessing}
-          aria-label={isRecording ? "Stop listening" : "Start listening"}
+          aria-label={isProcessing ? "Identifying song…" : isRecording ? "Stop listening" : "Start listening"}
+          aria-busy={isProcessing}
           style={{
             position: "absolute",
             top: "50%",
@@ -228,6 +229,9 @@ export default function AudioRecorder({ onResult, onError }: Props) {
 
       {/* ── Status line ─────────────────────────────────────── */}
       <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
         className="font-mono"
         style={{
           textAlign: "center",
@@ -247,7 +251,7 @@ export default function AudioRecorder({ onResult, onError }: Props) {
 
         {status === "recording" && (
           <span style={{ color: "var(--amber)", display: "flex", alignItems: "center", gap: 8 }}>
-            <span className="blink" style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: "var(--amber)" }} />
+            <span aria-hidden="true" className="blink" style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: "var(--amber)" }} />
             Listening — {countdown}s
           </span>
         )}
@@ -261,6 +265,7 @@ export default function AudioRecorder({ onResult, onError }: Props) {
         {status === "done" && (
           <button
             onClick={reset}
+            aria-label="Listen again — start a new recording"
             className="font-mono"
             style={{
               background: "none",
@@ -282,6 +287,7 @@ export default function AudioRecorder({ onResult, onError }: Props) {
         {status === "error" && (
           <button
             onClick={reset}
+            aria-label="Try again — start a new recording"
             className="font-mono"
             style={{
               background: "none",

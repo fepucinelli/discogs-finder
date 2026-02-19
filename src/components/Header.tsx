@@ -1,22 +1,9 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { getSession } from "@/lib/session";
 
-interface SessionInfo {
-  authenticated: boolean;
-  username?: string;
-}
-
-export default function Header() {
-  const [session, setSession] = useState<SessionInfo | null>(null);
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then(setSession)
-      .catch(() => setSession({ authenticated: false }));
-  }, []);
+export default async function Header() {
+  const session = await getSession();
+  const isAuthenticated = !!session.discogs_access_token;
 
   return (
     <header
@@ -55,7 +42,7 @@ export default function Header() {
 
         {/* Nav */}
         <nav aria-label="Main navigation" style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          {session?.authenticated ? (
+          {isAuthenticated ? (
             <>
               <Link
                 href="/listen"
@@ -77,7 +64,7 @@ export default function Header() {
                   letterSpacing: "0.06em",
                 }}
               >
-                @{session.username}
+                @{session.discogs_username}
               </span>
               <a
                 href="/api/auth/logout"
@@ -92,7 +79,7 @@ export default function Header() {
                 Exit
               </a>
             </>
-          ) : session === null ? null : (
+          ) : (
             <a
               href="/api/auth/discogs"
               className="font-mono header-connect-btn"

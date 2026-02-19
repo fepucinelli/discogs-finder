@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useActionState, useOptimistic } from "react";
+import { useFormStatus } from "react-dom";
+import { AddState } from "@/app/actions";
 
 export interface Release {
   id: number;
@@ -16,25 +18,51 @@ export interface Release {
 
 interface Props {
   release: Release;
-  onAdd: (releaseId: number) => Promise<void>;
+  addAction: (prev: AddState, formData: FormData) => Promise<AddState>;
 }
 
-export default function ReleaseCard({ release, onAdd }: Props) {
-  const [status, setStatus] = useState<"idle" | "adding" | "added" | "error">("idle");
+interface AddButtonProps {
+  releaseTitle: string;
+  optimisticAdded: boolean;
+  actionStatus: AddState["status"];
+}
 
-  async function handleAdd() {
-    setStatus("adding");
-    try {
-      await onAdd(release.id);
-      setStatus("added");
-    } catch {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 3000);
-    }
-  }
+function AddButton({ releaseTitle, optimisticAdded, actionStatus }: AddButtonProps) {
+  const { pending } = useFormStatus();
+  const isAdded = optimisticAdded || actionStatus === "added";
+
+  const label =
+    isAdded          ? "✓ Added"  :
+    pending          ? "Adding…"  :
+    actionStatus === "error" ? "Failed"  : "+ Add";
+
+  const ariaLabel =
+    isAdded          ? `${releaseTitle} added to your collection` :
+    pending          ? `Adding ${releaseTitle} to your collection…` :
+    actionStatus === "error" ? `Failed to add ${releaseTitle}. Try again.` :
+                       `Add ${releaseTitle} to your collection`;
+
+  return (
+    <button
+      type="submit"
+      disabled={pending || isAdded}
+      aria-label={ariaLabel}
+      aria-busy={pending}
+      className={`add-btn ${pending ? "adding" : actionStatus !== "idle" ? actionStatus : ""}`}
+    >
+      {label}
+    </button>
+  );
+}
+
+export default function ReleaseCard({ release, addAction }: Props) {
+  const [state, formAction] = useActionState(addAction, { status: "idle" });
+  const [optimisticAdded, setOptimisticAdded] = useOptimistic(
+    state.status === "added",
+    (_: boolean, val: boolean) => val
+  );
 
   const imgSrc = release.thumb || release.cover_image;
-
   const meta = [
     release.year,
     release.country,
@@ -119,27 +147,20 @@ export default function ReleaseCard({ release, onAdd }: Props) {
         )}
       </div>
 
-      {/* Add button */}
-      <button
-        onClick={status === "idle" ? handleAdd : undefined}
-        disabled={status !== "idle"}
-        aria-label={
-          status === "added"   ? `${release.title} added to your collection` :
-          status === "adding"  ? `Adding ${release.title} to your collection…` :
-          status === "error"   ? `Failed to add ${release.title}. Try again.` :
-                                 `Add ${release.title} to your collection`
-        }
-        aria-busy={status === "adding"}
-        className={`add-btn ${status !== "idle" ? status : ""}`}
+      {/* Add form */}
+      <form
+        action={async (fd) => {
+          setOptimisticAdded(true);
+          await formAction(fd);
+        }}
       >
-        {status === "added"
-          ? "✓ Added"
-          : status === "adding"
-          ? "Adding…"
-          : status === "error"
-          ? "Failed"
-          : "+ Add"}
-      </button>
+        <input type="hidden" name="release_id" value={release.id} />
+        <AddButton
+          releaseTitle={release.title}
+          optimisticAdded={optimisticAdded}
+          actionStatus={state.status}
+        />
+      </form>
     </div>
   );
 }
